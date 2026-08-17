@@ -6,8 +6,7 @@
 
 A Go library for the [Tuya Cloud OpenAPI](https://developer.tuya.com/en/docs/cloud/).
 
-Tuya's API is keyed by a **Tuya UID** and knows nothing about *your* users. So the module has two
-halves: one that talks to Tuya, and one that maps your own IDs onto Tuya's.
+## Install
 
 ```sh
 go get go.naturallyfunny.dev/tuya
@@ -15,24 +14,23 @@ go get go.naturallyfunny.dev/tuya
 
 ## The packages
 
-| Package               | What it is                                              | Depends on |
-| --------------------- | ------------------------------------------------------- | ---------- |
-| `tuya`                | The complete Tuya API client. Signing, tokens, devices, spaces.       | stdlib     |
-| `tuya/appaccount`     | Your app app's identity -> Tuya UID, for the app-account shape.     | `tuya`     |
-| `tuya/postgres`       | The owner → UID mapping stored in PostgreSQL (`pgx`).    | `appaccount` |
-| `tuya/firestore`      | The same mapping on Cloud Firestore.                     | `appaccount` |
+| Package           | What it is                                                      | Provides             | Depends on   |
+| ----------------- | --------------------------------------------------------------- | -------------------- | ------------ |
+| `tuya`            | The complete Tuya API client. Signing, tokens, devices, spaces.  | `*tuya.Client`       |              |
+| `tuya/appaccount` | Links your app's own user identity to a Tuya UID, then calls Tuya for it. | `*appaccount.Service` | `tuya`      |
+| `tuya/postgres`   | PostgreSQL implementation of `appaccount.Store`, over `pgx`.     | `appaccount.Store`   | `appaccount` |
+| `tuya/firestore`  | Cloud Firestore implementation of `appaccount.Store`.            | `appaccount.Store`   | `appaccount` |
 
 ```
 postgres ──┬─▶ appaccount ──▶ tuya
 firestore ─┘
 ```
 
-Only import what you need. `tuya` and `appaccount` are stdlib-only; `pgx` and the Firestore client
-enter your module graph only if you import those store packages.
+Only import what you need. Below are the explanations and guides.
 
 ## `package tuya`
 
-So you have just made a Tuya cloud project but don't know how to work with the API? I got you.
+So you have just made a Tuya cloud project but don't know how to work with the API, or struggle with all the access token management aswell as the request signing? I got you.
 
 Prepare your Access ID, Access Secret, and the base URL. The base URL is the data center your cloud
 project lives in:
@@ -58,7 +56,7 @@ client, err := tuya.New(accessID, accessSecret, "https://openapi-sg.iotbing.com"
 ```
 
 That is all the auth you ever have to think about. Signing every request with HMAC-SHA256, caching
-the access token, refreshing it when Tuya rejects it — the most stressful part of this API — is done
+the access token, refreshing it when Tuya rejects it — the most stressful part of working with tuya openAPI — is done
 for you. `New` fetches the first token straight away, so a bad credential or the wrong region fails
 right here instead of on your first device call. Pass `tuya.WithHTTPClient` if you want your own
 timeouts and transport.
@@ -69,14 +67,6 @@ Then just call the endpoint you want:
 devices, err := client.UserDevices(ctx, tuyaUID)
 status, err := client.DeviceStatus(ctx, deviceID)
 err = client.SendCommands(ctx, deviceID, []tuya.DataPoint{{Code: "switch_1", Value: true}})
-```
-
-`DeviceProperties` is the newer read of the same device, and it carries more than a code and a value
-— the data type, the name, and when the device last reported it. Name the codes you want, or none
-at all for every property the device reports:
-
-```go
-properties, err := client.DeviceProperties(ctx, deviceID, []string{"switch_1", "countdown_1"})
 ```
 
 If the endpoint you need isn't wrapped yet — or you'd simply rather drive it yourself — `Do` is the
@@ -151,7 +141,6 @@ straight through:
 ```go
 err = app.SendCommands(ctx, deviceID, []tuya.DataPoint{{Code: "switch_1", Value: true}})
 status, err := app.DeviceStatus(ctx, deviceID)
-properties, err := app.DeviceProperties(ctx, deviceID, nil)
 ```
 
 So `HasDevice` only answers, it doesn't block. It tells you if the device is in that owner's own
