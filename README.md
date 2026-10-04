@@ -1,6 +1,6 @@
 # tuya
 
-[![Go Reference](https://pkg.go.dev/badge/go.naturallyfunny.dev/tuya.svg)](https://pkg.go.dev/go.naturallyfunny.dev/tuya)
+[![Go Reference](https://pkg.go.dev/badge/go.trueardian.com/tuya.svg)](https://pkg.go.dev/go.trueardian.com/tuya)
 ![Go 1.25+](https://img.shields.io/badge/go-1.25%2B-00ADD8)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -9,7 +9,7 @@ A Go library for the [Tuya Cloud OpenAPI](https://developer.tuya.com/en/docs/clo
 ## Install
 
 ```sh
-go get go.naturallyfunny.dev/tuya
+go get go.trueardian.com/tuya
 ```
 
 ## The packages

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"go.naturallyfunny.dev/tuya"
+	"go.trueardian.com/tuya"
 )
 
 type fakeStore struct {

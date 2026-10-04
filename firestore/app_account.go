@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"go.naturallyfunny.dev/tuya/appaccount"
+	"go.trueardian.com/tuya/appaccount"
 )
 
 const defaultAppAccountCollection = "tuya_app_accounts"

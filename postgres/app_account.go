@@ -13,7 +13,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 
-	"go.naturallyfunny.dev/tuya/appaccount"
+	"go.trueardian.com/tuya/appaccount"
 )
 
 //go:embed migrations/appaccount

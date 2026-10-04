@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"go.naturallyfunny.dev/tuya/appaccount"
+	"go.trueardian.com/tuya/appaccount"
 )
 
 var linkedAt = time.Date(2026, 8, 7, 9, 0, 0, 0, time.UTC)

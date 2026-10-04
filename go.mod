@@ -1,4 +1,4 @@
-module go.naturallyfunny.dev/tuya
+module go.trueardian.com/tuya
 
 go 1.25.0
 

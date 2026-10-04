@@ -17,7 +17,7 @@ import (
 	"errors"
 	"time"
 
-	"go.naturallyfunny.dev/tuya"
+	"go.trueardian.com/tuya"
 )
 
 type Account struct {
